@@ -14,7 +14,7 @@ var scores, roundScore, activePlayer; // dice was removed
 
 scores = [0,0];// first and second player
 roundScore = 0; // any round
-activePlayer = 1;
+activePlayer = 0;
 
 //now dice takes on random variable from 1 to 6
 // see notes on effect of each piece
@@ -87,8 +87,42 @@ document.querySelector('.btn-roll').addEventListener('click',function()
     diceDOM.style.display = 'block';
     diceDOM.src = 'dice-' + dice + '.png'; // change the image w. source attribute
 
+    //3. update the round score (red box), if roll was not 1.
+    if (dice !== 1) // double equal does not do type coercion
+    {
+        //add score
+        roundScore += dice;
+        //roundScore = roundScore + dice; // same as above
+        document.querySelector('#current-' + activePlayer).textContent = roundScore;
+        //display the roundscore above of current textcontent roundscore
+    }
+    else 
+    {
+        //next player
+        //use ternary
+        activePlayer === 0 ? activePlayer =1 : activePlayer = 0;
+        roundScore = 0;
+        document.getElementById('current-0').textContent = '0'; 
+        document.getElementById('current-1').textContent = '0';
+        // sets red box to zero in user interface
 
-    //3. update the round score, if roll was not 1.
+        //now going to add a class and put somewhere else in HTML
+        //the grey background of current player 
+        //document.querySelector('.player-0-panel').classList.remove('active');
+        //document.querySelector('.player-1-panel').classList.add('active');
+        
+        //Toggle is better
+        document.querySelector('.player-0-panel').classList.toggle('active');
+        document.querySelector('.player-1-panel').classList.toggle('active');
+        //add if not there, if there, remove with "toggle"
+        // I added a little space in the HTML to maeke it a second term
+        //now it works.   
+        
+        //Hide DICE again before start of next person.  Dice class.
+        // Player has an empty spot
+        document.querySelector('.dice').style.display = 'none';
+    }
+
 
 });
 
