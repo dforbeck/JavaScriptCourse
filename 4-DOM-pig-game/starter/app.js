@@ -99,6 +99,40 @@ document.querySelector('.btn-roll').addEventListener('click',function()
     else 
     {
         //next player
+        nextPlayer();
+    }
+
+
+});
+//select another event listener, on the click, with an anonymous function
+document.querySelector('.btn-hold').addEventListener('click',function()
+{
+    //as soon as click 
+    //add current score to global score
+    scores[activePlayer] += roundScore;
+
+    //update the UI, select score of active player and "print" that content.
+    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+
+    //Check if player won the game
+    if(scores[activePlayer]>=20)
+    {
+        document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
+        document.querySelector('.dice').style.display = 'none';
+        //changing style of loser above
+        document.querySelector('.player-'+ activePlayer+'-panel').classList.add('winner')
+        //above implements the winner CSS styling
+        document.querySelector('.player-'+ activePlayer+'-panel').classList.remove('active');
+        //above removes the active player css pieces
+    }
+    else
+    {
+        nextPlayer()
+    }
+});
+
+function nextPlayer ()
+{
         //use ternary
         activePlayer === 0 ? activePlayer =1 : activePlayer = 0;
         roundScore = 0;
@@ -121,11 +155,7 @@ document.querySelector('.btn-roll').addEventListener('click',function()
         //Hide DICE again before start of next person.  Dice class.
         // Player has an empty spot
         document.querySelector('.dice').style.display = 'none';
-    }
-
-
-});
-
+}
 
 
 
