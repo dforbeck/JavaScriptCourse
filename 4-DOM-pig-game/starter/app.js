@@ -9,12 +9,9 @@ GAME RULES:
 
 */
 
-//declare all variables here
-var scores, roundScore, activePlayer; // dice was removed
+//declare all variables here, global
+var scores, roundScore, activePlayer, gamePlaying; // dice was removed
 
-scores = [0,0];// first and second player
-roundScore = 0; // any round
-activePlayer = 0;
 
 //now dice takes on random variable from 1 to 6
 // see notes on effect of each piece
@@ -47,14 +44,8 @@ activePlayer = 0;
 //Change the CSS style to none
 //Want to make it disappear at outset
 //change by style method, CSS display property, then CSS value 
-document.querySelector('.dice').style.display = 'none';
 
-//CAN GET ITEMS BY ID, THE FOLLOWING WORKS ONLY FOR IDS
-// set all values to beginning values to zero.
-document.getElementById('score-0').textContent = '0';
-document.getElementById('score-1').textContent = '0';
-document.getElementById('current-0').textContent = '0';
-document.getElementById('current-1').textContent = '0';
+init();
 
 //EVENT HANDLER
 //Button where roll dice.
@@ -76,6 +67,8 @@ document.getElementById('current-1').textContent = '0';
 // see below
 document.querySelector('.btn-roll').addEventListener('click',function()
 {
+    if(gamePlaying)
+    {
     //1, random number
     var dice = Math.floor(Math.random()*6)+1;
     // only declare here now because only need when someone clicks.
@@ -102,11 +95,14 @@ document.querySelector('.btn-roll').addEventListener('click',function()
         nextPlayer();
     }
 
-
+    }
 });
+
 //select another event listener, on the click, with an anonymous function
 document.querySelector('.btn-hold').addEventListener('click',function()
 {
+    if (gamePlaying)
+    {
     //as soon as click 
     //add current score to global score
     scores[activePlayer] += roundScore;
@@ -124,10 +120,13 @@ document.querySelector('.btn-hold').addEventListener('click',function()
         //above implements the winner CSS styling
         document.querySelector('.player-'+ activePlayer+'-panel').classList.remove('active');
         //above removes the active player css pieces
+        gamePlaying = false;  // now cannot hold because have  winner
     }
     else
     {
         nextPlayer()
+    }
+    
     }
 });
 
@@ -157,7 +156,41 @@ function nextPlayer ()
         document.querySelector('.dice').style.display = 'none';
 }
 
+//listen to start new game event
+document.querySelector('.btn-new').addEventListener('click', init);
 
+function init()
+{
+//ALL the things that start at the beginning of a game
+
+scores = [0,0];// first and second player
+roundScore = 0; // any round
+activePlayer = 0;
+
+gamePlaying = true;
+
+document.querySelector('.dice').style.display = 'none';
+
+//CAN GET ITEMS BY ID, THE FOLLOWING WORKS ONLY FOR IDS
+// set all values to beginning values to zero.
+document.getElementById('score-0').textContent = '0';
+document.getElementById('score-1').textContent = '0';
+document.getElementById('current-0').textContent = '0';
+document.getElementById('current-1').textContent = '0';
+
+document.getElementById('name-0').textContent = 'Player 1';
+document.getElementById('name-1').textContent = 'Player 2'; //# is only query
+
+//Remove winner/active class from previous game
+document.querySelector('.player-0-panel').classList.remove('winner')
+document.querySelector('.player-1-panel').classList.remove('winner')
+document.querySelector('.player-0-panel').classList.remove('active')
+document.querySelector('.player-1-panel').classList.remove('active')
+
+//start over with regular styling
+document.querySelector('.player-0-panel').classList.add('active')
+
+}
 
 
 
